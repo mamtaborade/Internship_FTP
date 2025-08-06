@@ -1,8 +1,10 @@
-
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+
+#define PORT 8080
+#define MAX_BUFFER 1024
 
 int main() {
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
@@ -18,6 +20,13 @@ int main() {
     int client_fd = accept(server_fd, NULL, NULL);
     char buffer[1024];
     int bytes;
+    
+        // Task: Send welcome message to client
+    char *welcome_msg = "Welcome to the TCP server!\n";
+    write(client_fd, welcome_msg, strlen(welcome_msg));  // send to client
+
+    // Print on server terminal
+    printf("telnet connected. Sent welcome message.\n");
 
     while ((bytes = recv(client_fd, buffer, sizeof(buffer), 0)) > 0) {
         send(client_fd, buffer, bytes, 0);
@@ -27,3 +36,4 @@ int main() {
     close(server_fd);
     return 0;
 }
+
