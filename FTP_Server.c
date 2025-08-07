@@ -24,7 +24,7 @@ int main() {
 
     while ((bytes = recv(client_fd, buffer, sizeof(buffer), 0)) > 0) { 
         buffer[bytes] ='\0';
-        
+        printf("Client say : %s\n",buffer);
         send(client_fd, buffer, bytes, 0);
     }
 
