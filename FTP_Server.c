@@ -28,12 +28,13 @@ int main() {
     // Print on server terminal
     printf("telnet connected. Sent welcome message.\n");
 
-    while ((bytes = recv(client_fd, buffer, sizeof(buffer), 0)) > 0) {
+ while ((bytes = recv(client_fd, buffer, sizeof(buffer), 0)) > 0) {
+        // Print the received message on the server terminal
+        printf("Received message: %.*s\n", bytes, buffer);
+        
         send(client_fd, buffer, bytes, 0);
     }
-
     close(client_fd);
     close(server_fd);
     return 0;
 }
-
