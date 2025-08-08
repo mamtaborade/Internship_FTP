@@ -4,17 +4,35 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <time.h>
 #include <arpa/inet.h>
+
+
 
 #define PORT 8080
 
 int main() {
+
+    time_t now;
+    struct tm *local;
+    char buffer [4096];
+    char response [1024];
+    char time_string[100];
+    time(&now); // get the current time using time function in it passing the address of varaible declard 
+
+    local=localtime(&now); // convert to the local time
+    strftime(time_string,sizeof(time_string),"%Y-%m-%d %H:%M:%S",local); //conver that structured time into readble string format 
+
+
     int server_fd, client_fd;
     struct sockaddr_in address;
-    char buffer [4096] ;
-    char response[] = "HTTP/1.1 200 OK\r\n"
-                      "Content-Type: text/html\r\n\r\n"
-                      "<html><body><h1>Hello from Server!</h1></body></html>";
+
+    snprintf(response,sizeof(response),"HTTP/1.1 200 OK\r\n"  // uesd this function to print the HTMl content on browser 
+             "Content-Type: text/html\r\n\r\n"
+             "<html><body>"
+             "<h1>Hello from Server!</h1>"
+             "<p>Current server time: %s</p>"
+             "</body></html>",time_string);
     socklen_t addrlen = sizeof(address);
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
