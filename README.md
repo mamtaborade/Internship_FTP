@@ -9,4 +9,4 @@ Task 2:- Modify the server to send a welcome message to the client immediately a
 # DAY05_Task(OUTPUT)
 Task 3:-  Modify the server to terminate connection if client sends "exit".
 
-![image alt]()
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/c62076674a956842f698fcc04ee82b6cffbd84c1/Day05_Task(OP).png)
