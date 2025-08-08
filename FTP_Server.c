@@ -21,7 +21,7 @@ int main() {
     char buffer[1024];
     int bytes;
     
-        // Task: Send welcome message to client
+        // Task(day04): Send welcome message to client
     char *welcome_msg = "Welcome to the TCP server!\n";
     write(client_fd, welcome_msg, strlen(welcome_msg));  // send to client
 
@@ -31,6 +31,12 @@ int main() {
  while ((bytes = recv(client_fd, buffer, sizeof(buffer), 0)) > 0) {
         // Print the received message on the server terminal
         printf("Received message: %.*s\n", bytes, buffer);
+        
+        //Task(day05): Check if the received message is "exit"
+        if (strncmp(buffer, "exit" , 4) == 0){
+        	printf("Client requested to exit. connection closed\n");
+        	break;
+        }
         
         send(client_fd, buffer, bytes, 0);
     }
