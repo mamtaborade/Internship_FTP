@@ -37,7 +37,7 @@ int main() {
         	printf("Client requested to exit. connection closed\n");
         	break;
         }
-        
+               
         send(client_fd, buffer, bytes, 0);
     }
     close(client_fd);
