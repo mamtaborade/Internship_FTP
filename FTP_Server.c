@@ -4,6 +4,17 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+
+void newline(char *str)
+{
+    size_t  len = strlen(str);
+    if(len > 0 && str[len -1]=='\n')    // we writng this function becaude when enterd the exit on cleint server it takes newline 'exit\n' ,so reomve this line we wrote this function 
+    
+        str[len - 1]='\0';
+    if(len > 1 && str[len -2]=='r')
+        str[len -2]='\0';
+}
+
 int main() {
     int server_fd = socket(AF_INET, SOCK_STREAM, 0);
     struct sockaddr_in server_addr = {0};
@@ -21,10 +32,20 @@ int main() {
 
     char buffer[1024];
     int bytes;
+    int is_exit=1;
 
     while ((bytes = recv(client_fd, buffer, sizeof(buffer), 0)) > 0) { 
         buffer[bytes] ='\0';
+        newline(buffer);
         printf("Client say : %s\n",buffer);
+        
+        if(strcmp(buffer,"exit")==0)
+        {
+            const char *shudtdown_msg ="Server is Shutting Down.....\n";
+            send(client_fd,shudtdown_msg,strlen(shudtdown_msg),0);
+            break ; // exit the while loop to terminate server 
+        }
+            
         send(client_fd, buffer, bytes, 0);
     }
 
