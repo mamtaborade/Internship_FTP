@@ -23,7 +23,8 @@ int main() {
     address.sin_port = htons(PORT);
 
     bind(server_fd, (struct sockaddr*)&address, sizeof(address));
-  
+    listen(server_fd, 5);
+
     client_fd = accept(server_fd, (struct sockaddr*)&address, &addrlen);
     if (client_fd >= 0) {
         // TASK: Read the HTTP request
@@ -41,3 +42,4 @@ int main() {
     close(server_fd);
     return 0;
 }
+
