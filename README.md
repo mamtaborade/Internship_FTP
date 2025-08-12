@@ -10,3 +10,15 @@ Task 2:- Modify the server to send a welcome message to the client immediately a
 Task 3:-  Modify the server to terminate connection if client sends "exit".
 
 ![image alt](https://github.com/mamtaborade/Internship_FTP/blob/c62076674a956842f698fcc04ee82b6cffbd84c1/Day05_Task(OP).png)
+
+# DAY06_Task(OUTPUT)
+Task 1 – Log the HTTP request
+Print the full raw HTTP request received from the client on the server terminal.
+Task 2 – Change HTML content dynamically
+Modify the HTML response to include:
+Current date/time (use time() and strftime() in C).
+Client’s IP address (from struct sockaddr_in after accept()).
+Task 3 – Serve different responses based on URL path
+If client requests /hello, respond with "Hello Page".
+If /bye, respond with "Goodbye Page".
+Otherwise, respond with "Default Page".
