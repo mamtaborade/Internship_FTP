@@ -23,4 +23,4 @@ If client requests /hello, respond with "Hello Page".
 If /bye, respond with "Goodbye Page".
 Otherwise, respond with "Default Page".
 
-![image alt](https://github.com/mamtaborade/Internship_FTP/blob/b9507f7421c8f4b65847df0500474e173f3a02e5/OUTPUT/Day-6_Task_Default.png)
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/3134e99fb8d87358b453ffa281acc08b2b827fe8/OUTPUT/Day-6_Task_bye.png)
