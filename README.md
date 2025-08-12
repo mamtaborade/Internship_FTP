@@ -22,3 +22,5 @@ Task 3 – Serve different responses based on URL path
 If client requests /hello, respond with "Hello Page".
 If /bye, respond with "Goodbye Page".
 Otherwise, respond with "Default Page".
+
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/b9507f7421c8f4b65847df0500474e173f3a02e5/OUTPUT/Day-6_Task_Default.png)
