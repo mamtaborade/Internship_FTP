@@ -38,26 +38,36 @@ int main() {
 
     client_fd = accept(server_fd, (struct sockaddr*)&address, &addrlen);
     if (client_fd >= 0) {
-        // Log the HTTP request
+        // Task 1 – Log the HTTP request
         read(client_fd, buffer, BUFFER_SIZE);
         printf("Received request:\n%s\n", buffer);
 
-        // Get client IP address
+        // Task 2 – Get client IP address
         get_client_ip(&address, client_ip);
 
-        // Get current date/time
+        // Task 2 – Get current date/time
         get_current_time(time_buffer);
+
+        // Task 3 – Serve different responses based on URL path
+        char *response_body;
+        if (strstr(buffer, "GET /hello") != NULL) {
+            response_body = "Hello Page";
+        } else if (strstr(buffer, "GET /bye") != NULL) {
+            response_body = "Goodbye Page";
+        } else {
+            response_body = "Default Page";
+        }
 
         // Create the HTTP response
         snprintf(response, sizeof(response), 
                  "HTTP/1.1 200 OK\r\n"
                  "Content-Type: text/html\r\n\r\n"
                  "<html><body>"
-                 "<h1>Hello from Server!</h1>"
+                 "<h1>%s</h1>"
                  "<p>Current Date/Time: %s</p>"
                  "<p>Your IP Address: %s</p>"
                  "</body></html>", 
-                 time_buffer, client_ip);
+                 response_body, time_buffer, client_ip);
 
         write(client_fd, response, strlen(response));
         close(client_fd);
