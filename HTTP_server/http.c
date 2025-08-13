@@ -60,17 +60,41 @@ int main()
                 perror("recv failed");
             }
 
-    char client_ip_str[INET_ADDRSTRLEN]; 
-    
+    char client_ip[INET_ADDRSTRLEN];
 
-    if (inet_ntop(AF_INET, &(client_addr.sin_addr), client_ip_str, sizeof(client_ip_str)) == NULL) {
+    if (inet_ntop(AF_INET, &(client_addr.sin_addr), client_ip, sizeof(client_ip)) == NULL) {
         perror("inet_ntop");
       
     } else {
-        printf("Client IP address: %s\n", client_ip_str);
+        printf("Client IP address: %s\n", client_ip);
     }
 
-            
+    char path[64] = "/";
+    sscanf(buffer,"GET %s", path);
+    printf("print requested path: %s\n", path);
+
+     const char *content;
+        if (strcmp(path, "/hello") == 0){
+            content = "<h1>Hello Page</h1>";
+        } else if (strcmp(path, "/bye") == 0)
+            content = "<h1>Goodbye Page</h1>";
+        else
+            content = "<h1>Default Page</h1>";
+
+        
+        snprintf(response, sizeof(response),
+                 "HTTP/1.1 200 OK\r\n"
+                 "Content-Type: text/html\r\n\r\n"
+                 "<html><body>"
+                 "%s"
+                 "<p>Current time: %s</p>"
+                 "<p>Your IP: %s</p>"
+                 "</body></html>",
+                 content, time_buffer, client_ip);
+
+
+
+               
     }
     
     write(client_fd, response, strlen(response));
