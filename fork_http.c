@@ -4,10 +4,28 @@
 #include <string.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <time.h>
 
 #define PORT 8080
 
-void handle_client(int client_fd) {
+void handle_client(int client_fd, struct sockaddr_in client_address) {
+    // Task1 Get the client's IP address and port number
+    char client_ip[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &client_address.sin_addr, client_ip, sizeof(client_ip));
+    int client_port = ntohs(client_address.sin_port);
+
+    // Task1 Get the current time
+    time_t current_time;
+    time(&current_time);
+    char* time_str = ctime(&current_time);
+    time_str[strlen(time_str) - 1] = '\0'; // Remove the newline character
+
+    // Task1 Print process details
+    printf("Child process PID: %d\n", getpid());
+    printf("Client IP: %s, Port: %d\n", client_ip, client_port);
+    printf("Connection start time: %s\n", time_str);
+
+    // Send HTTP response
     char response[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
                       "<html><body><h1>Hello from Forked Server!</h1></body></html>";
     write(client_fd, response, strlen(response));
@@ -16,9 +34,8 @@ void handle_client(int client_fd) {
 
 int main() {
     int server_fd, client_fd;
-    struct sockaddr_in address;
-    socklen_t addrlen = sizeof(address);
-    int ret;
+    struct sockaddr_in address, client_address;
+    socklen_t addrlen = sizeof(client_address);
 
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     address.sin_family = AF_INET;
@@ -26,30 +43,17 @@ int main() {
     address.sin_port = htons(PORT);
     bind(server_fd, (struct sockaddr*)&address, sizeof(address));
     listen(server_fd, 10);
-    
-    printf("program started..\n");
-	ret = fork();
-	if(ret == 0) {
-		printf("child: fork() returned: %d\n", ret);
-		printf("child: pid=%d\n", getpid());
-
-	}
-	else {
-		printf("parent: fork() returned: %d\n", ret);
-		//printf("parent: pid=%d\n", getpid());
-		//printf("parent: parent pid=%d\n", getppid());
-	}
 
     while (1) {
-        client_fd = accept(server_fd, (struct sockaddr*)&address, &addrlen);
+        client_fd = accept(server_fd, (struct sockaddr*)&client_address, &addrlen);
         if (fork() == 0) {
-            handle_client(client_fd);
+            handle_client(client_fd, client_address);
             exit(0);
         }
         close(client_fd);
     }
 
     close(server_fd);
-    getchar();
     return 0;
 }
+
