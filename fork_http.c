@@ -11,16 +11,22 @@
 void handle_client(int client_fd)
 
 {
+    char buffer [1024];
     char response []= "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
                       "<html><body><h1>Hello from Forked Server!</h1></body></html>";
 
                       write(client_fd,response,strlen(response));
                       close(client_fd);
+
+
+           
+            close(client_fd);
 }
 
 int main ( ){
     
     int server_fd, client_fd ;
+    char buffer [1024];
 
     struct sockaddr_in address ,client_addr;
     socklen_t addrlen = sizeof(address);
@@ -38,6 +44,29 @@ int main ( ){
             client_fd =accept(server_fd,(struct sockaddr*)&address,&addrlen);
         
             if(fork()==0){
+
+                 while(1)
+            {
+                memset(buffer,0,sizeof(buffer));
+                int bytes_read=read(client_fd,buffer,sizeof(buffer)-1); // read data from client 
+
+                if(bytes_read <=0)
+                {
+                    break ; // client close connection 
+                }
+
+                buffer[bytes_read]='\0';
+                printf("Client said : %s\n",buffer);
+
+                    // if client say exit stop serving 
+                if(strncmp(buffer,"exit",4)==0)
+                {
+                    printf("Client requested to close connection.\n");
+                    break ;
+                }
+                write(client_fd,buffer,strlen(buffer));
+
+            }
 
                 // child process 
             pid_t pid =getpid();
@@ -59,7 +88,7 @@ int main ( ){
 
             handle_client(client_fd);
                 exit(0);
-
+            
             }
             close(client_fd);
         }
