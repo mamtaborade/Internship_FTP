@@ -59,6 +59,22 @@ int main() {
         buffer[valread] = '\0';
         printf("Request:\n%s\n", buffer);
 
+        char method[16], path[256];
+         sscanf(buffer, "%s %s", method, path);
+
+        // If just "/" → serve index.html
+          if (strcmp(path, "/") == 0) {
+         strcpy(path, "/index.html");
+          }
+
+        // Remove leading "/" and make filename
+         char filename[256];
+         snprintf(filename, sizeof(filename), ".%s", path);
+
+        // Now serve the file
+          send_file(client_fd, filename);
+
+
         // Always serve index.html
         send_file(client_fd, "index.html");
 
