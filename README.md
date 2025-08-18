@@ -24,3 +24,16 @@ If /bye, respond with "Goodbye Page".
 Otherwise, respond with "Default Page".
 
 ![image alt](https://github.com/mamtaborade/Internship_FTP/blob/3134e99fb8d87358b453ffa281acc08b2b827fe8/OUTPUT/Day-6_Task_bye.png)
+
+# DAY08_Task(OUTPUT)
+Task 1 – Show process details for each client
+Print:
+Child process PID
+Client’s IP and port number
+Connection start time
+Task 2 – Keep child alive for multiple requests from same client
+Instead of sending one message and closing:
+Put a while loop inside the child process to read and respond until the client sends "exit".
+This helps simulate a real persistent TCP connection.
+
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/d55a95d6044f72cb64d8ed4e88b6394b3e66a6c9/OUTPUT/Day08_Task2(OP).png)
