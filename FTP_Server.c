@@ -8,7 +8,7 @@
 void newline(char *str)
 {
     size_t  len = strlen(str);
-    if(len > 0 && str[len -1]=='\n')    // we writng this function becaude when enterd the exit on cleint server it takes newline 'exit\n' ,so reomve this line we wrote this function 
+    if(len > 0 && str[len -1]=='\n')    // we writng this function because when enterd the exit on cleint server it takes newline 'exit\n' ,so reomve this line we wrote this function 
     
         str[len - 1]='\0';
     if(len > 1 && str[len -2]=='r')
