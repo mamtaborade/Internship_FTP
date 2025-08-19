@@ -19,9 +19,38 @@ void send_file(int client_fd, const char *filename) {
         return;
     }
 
+
+
+    // Decide the content type based on Extension 
+    const char *ext =strrchr(filename,'.');   // finish last "."
+    char content_type[64]="text/plain ";    // default 
+
+    if(ext){
+
+        if(strcmp(ext,"html")==0 || strcmp(ext,".htm")==0)
+            strcpy(content_type,"text/html");
+        else if (strcmp(ext,".css")==0)
+             strcpy(content_type, "text/css");
+        else if (strcmp(ext, ".js") == 0)
+            strcpy(content_type, "application/javascript");
+        else if (strcmp(ext, ".jpg") == 0 || strcmp(ext, ".jpeg") == 0)
+            strcpy(content_type, "image/jpeg");
+        else if (strcmp(ext, ".png") == 0)
+            strcpy(content_type, "image/png");
+        else if (strcmp(ext, ".gif") == 0)
+            strcpy(content_type, "image/gif");
+        else if (strcmp(ext, ".txt") == 0)
+            strcpy(content_type, "text/plain");
+    }
+
+
+    
+
+
     // Send HTTP header
-    char header[] = "HTTP/1.1 200 OK\r\n"
-                    "Content-Type: text/html\r\n\r\n";
+    char header[256];
+    snprintf(header,sizeof(header),  "HTTP/1.1 200 OK\r\n"    
+                    "Content-Type: %s\r\n\r\n",content_type);
     write(client_fd, header, strlen(header));
 
     // Send file contents
@@ -60,7 +89,7 @@ int main() {
         printf("Request:\n%s\n", buffer);
 
         char method[16], path[256];
-         sscanf(buffer, "%s %s", method, path);
+         sscanf(buffer, "%s %s", method, path);  // extract "GET" and "/about.html"
 
         // If just "/" → serve index.html
           if (strcmp(path, "/") == 0) {
@@ -69,7 +98,7 @@ int main() {
 
         // Remove leading "/" and make filename
          char filename[256];
-         snprintf(filename, sizeof(filename), ".%s", path);
+         snprintf(filename, sizeof(filename),".%s", path);
 
         // Now serve the file
           send_file(client_fd, filename);
