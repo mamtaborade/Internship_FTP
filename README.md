@@ -37,3 +37,11 @@ Put a while loop inside the child process to read and respond until the client s
 This helps simulate a real persistent TCP connection.
 
 ![image alt](https://github.com/mamtaborade/Internship_FTP/blob/d55a95d6044f72cb64d8ed4e88b6394b3e66a6c9/OUTPUT/Day08_Task2(OP).png)
+
+# DAY11_Task(OUTPUT)
+Task 1 – Serve index.html - Create a file index.html;
+Task 2 – Handle Missing Files (404 Error) - Modify server to send a 404 page if file doesn’t exist.
+Task 3 – Map URL → File - Parse the request line (GET /about.html HTTP/1.1). - Extract the file name (about.html). - If no file given (just /), serve index.html.
+Task 4 – Support Different File Types - Based on file extension, send correct Content-Type:  .html → text/html  .txt → text/plain  .jpg → image/jpeg .png → image/png
+
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/266eb6960ec0e9c394626389f2fd21af385459b7/OUTPUT/Day11_Task(OP).webm)
