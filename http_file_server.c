@@ -19,9 +19,26 @@ void send_file(int client_fd, const char *filename) {
         return;
     }
 
+    // Task : Determine content type based on file extension
+    const char *content_type;
+    if (strstr(filename, ".html")) {
+        content_type = "text/html";
+    } else if (strstr(filename, ".txt")) {
+        content_type = "text/plain";
+    } else if (strstr(filename, ".jpeg")) {
+        content_type = "image/jpeg";
+    } else if (strstr(filename, ".png")) {
+        content_type = "image/png";
+    } else if (strstr(filename, ".gif")) {
+        content_type = "image/gif";
+    } else {
+        content_type = "application/octet-stream"; // Default for unknown types
+    }
+
     // Send HTTP header
-    char header[] = "HTTP/1.1 200 OK\r\n"
-                    "Content-Type: text/html\r\n\r\n";
+    char header[256];
+    snprintf(header, sizeof(header), "HTTP/1.1 200 OK\r\n"
+                                      "Content-Type: %s\r\n\r\n", content_type);
     write(client_fd, header, strlen(header));
 
     // Send file contents
@@ -31,6 +48,23 @@ void send_file(int client_fd, const char *filename) {
         write(client_fd, buf, n);
     }
     fclose(fp);
+}
+
+void handle_request(int client_fd, const char *request) {
+    char method[10], path[256];
+    sscanf(request, "%s %s", method, path);
+
+    // Remove leading '/' from path
+    if (path[0] == '/') {
+        memmove(path, path + 1, strlen(path));
+    }
+
+    // Task : If file not found, serve index.html
+    if (strlen(path) == 0) {
+        strcpy(path, "index.html");
+    }
+
+    send_file(client_fd, path);
 }
 
 int main() {
@@ -59,8 +93,8 @@ int main() {
         buffer[valread] = '\0';
         printf("Request:\n%s\n", buffer);
 
-        // Always serve index.html
-        send_file(client_fd, "index.html");
+        // Handle the request
+        handle_request(client_fd, buffer);
 
         close(client_fd);
     }
