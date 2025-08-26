@@ -90,7 +90,7 @@ int main(void) {
            // task 2 only  HTTP methods printing ..
 
         // assume `req` contains full HTTP request
-char *host_start = strstr(req, "Host:");
+char *host_start = strstr(req, "Host:");  // we extracting host value from http rwa request line  thsi is logic for extracting host value .
 if (host_start) {
     host_start += 5;  // move pointer after "Host:"
     while (*host_start == ' ') host_start++;  // skip spaces
