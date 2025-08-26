@@ -86,9 +86,10 @@ int main(void) {
         method[0] = path[0] = version[0] = '\0';
 
         sscanf(req, "%7s %511s %15s", method, path, version);
-        printf("Method=%s Path=%s Version=%s\n", method, path, version);
-
-        const char *body = "Parsed!\n";
+        printf("Http methods = %s\n",method);  
+           // task 2 only  HTTP methods printing ..
+        if (strcmp(method,"GET")!=0){
+        const char *body = "405 Method not Allowed \n";
         char hdr[200];
         snprintf(hdr, sizeof(hdr),
                  "HTTP/1.1 200 OK\r\n"
@@ -100,5 +101,7 @@ int main(void) {
         send(c, hdr, strlen(hdr), 0);
         send(c, body, strlen(body), 0);
         close(c);
+        continue ; // skip to next request 
     }
+}
 }
