@@ -83,14 +83,14 @@ int main(void) {
         }
 
         char method[8], path[512], version[16] ;
-        method[0] = path[0] = version[0] = '\0';
+           method[0] = path[0] = version[0] = '\0';
 
         sscanf(req, "%7s %511s %15s", method, path, version);
         printf("Http methods = %s\n",method);  
            // task 2 only  HTTP methods printing ..
 
         // assume `req` contains full HTTP request
-char *host_start = strstr(req, "Host:");  // we extracting host value from http rwa request line  thsi is logic for extracting host value .
+char *host_start = strstr(req, "Host: \n");  // we extracting host value from http rwa request line  thsi is logic for extracting host value .
 if (host_start) {
     host_start += 5;  // move pointer after "Host:"
     while (*host_start == ' ') host_start++;  // skip spaces
