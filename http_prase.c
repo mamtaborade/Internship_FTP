@@ -82,14 +82,36 @@ int main(void) {
             continue;
         }
 
-        char method[8], path[512], version[16];
+        char method[8], path[512], version[16] ;
         method[0] = path[0] = version[0] = '\0';
 
         sscanf(req, "%7s %511s %15s", method, path, version);
         printf("Http methods = %s\n",method);  
            // task 2 only  HTTP methods printing ..
+
+        // assume `req` contains full HTTP request
+char *host_start = strstr(req, "Host:");
+if (host_start) {
+    host_start += 5;  // move pointer after "Host:"
+    while (*host_start == ' ') host_start++;  // skip spaces
+
+    char host_value[256];
+    int i = 0;
+
+    // copy until newline or string end
+    while (*host_start && *host_start != '\r' && *host_start != '\n' && i < 255) {
+        host_value[i++] = *host_start++;
+    }
+    host_value[i] = '\0';
+
+    printf("Host = %s\n", host_value);
+}
+
+        
+
+     
         if (strcmp(method,"GET")!=0){
-        const char *body = "405 Method not Allowed \n";
+        const char *body = "405 Method not Allowed \n";    // if rahter than GET method fpund it will show error
         char hdr[200];
         snprintf(hdr, sizeof(hdr),
                  "HTTP/1.1 200 OK\r\n"
