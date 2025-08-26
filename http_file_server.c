@@ -74,6 +74,7 @@ int main() {
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
 
+    // bind socket 
     bind(server_fd, (struct sockaddr *)&address, sizeof(address));
     listen(server_fd, 5);
 
