@@ -88,6 +88,23 @@ int main(void) {
         sscanf(req, "%7s %511s %15s", method, path, version);
         printf("Method=%s Path=%s Version=%s\n", method, path, version);
 
+        // Check for supported methods
+        if (strcmp(method, "GET") != 0) {
+            const char *error_body = "Method Not Allowed\n";
+            char error_hdr[200];
+            snprintf(error_hdr, sizeof(error_hdr),
+                     "HTTP/1.1 405 Method Not Allowed\r\n"
+                     "Content-Type: text/plain\r\n"
+                     "Content-Length: %zu\r\n"
+                     "Connection: close\r\n\r\n",
+                     strlen(error_body));
+
+            send(c, error_hdr, strlen(error_hdr), 0);
+            send(c, error_body, strlen(error_body), 0);
+            close(c);
+            continue; // Reject unsupported methods
+        }
+
         const char *body = "Parsed!\n";
         char hdr[200];
         snprintf(hdr, sizeof(hdr),
