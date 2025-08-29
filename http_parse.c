@@ -31,6 +31,25 @@ ssize_t recv_all_headers(int fd, char *buf, size_t cap) {
     printf("Number of recv() calls: %d\n", recv_count); // Print the number of recv() calls
     return (ssize_t)used;
     
+    // Task 3: Parse Host header
+    char *host_line = strstr(req, "\nHost:");
+    if (!host_line) host_line = strstr(req, "\nhost:"); // case-insensitive fallback
+    if (host_line) {
+        host_line += 6; // skip "Host:"
+        while (*host_line == ' ' || *host_line == '\t') host_line++;
+        char host[512];
+        int i = 0;
+        while (host_line[i] != '\r' && host_line[i] != '\n' && i < (int)sizeof(host) - 1) {
+            host[i] = host_line[i];
+            i++;
+        }
+        host[i] = '\0';
+        trim(host);
+        printf("Host=%s\n", host);
+    } else {
+        printf("Host header not found\n");
+    }
+    
         // Task 4: Serve different responses based on path
     const char *response_body = NULL;
     char time_str[128];
