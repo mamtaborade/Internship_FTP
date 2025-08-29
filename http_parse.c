@@ -30,6 +30,35 @@ ssize_t recv_all_headers(int fd, char *buf, size_t cap) {
 
     printf("Number of recv() calls: %d\n", recv_count); // Print the number of recv() calls
     return (ssize_t)used;
+    
+        // Task 4: Serve different responses based on path
+    const char *response_body = NULL;
+    char time_str[128];
+    if (strcmp(path_only, "/hello") == 0) {
+        response_body = "Hello Student!\n";
+    } else if (strcmp(path_only, "/time") == 0) {
+        time_t now = time(NULL);
+        struct tm *tm_info = localtime(&now);
+        strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S\n", tm_info);
+        response_body = time_str;
+    } else {
+        response_body = "Unknown Path!\n";
+    }
+    
+    char hdr[256];
+    snprintf(hdr, sizeof(hdr),
+             "HTTP/1.1 200 OK\r\n"
+             "Content-Type: text/plain\r\n"
+             "Content-Length: %zu\r\n"
+             "Connection: close\r\n\r\n",
+             strlen(response_body));
+             
+    send(c, hdr, strlen(hdr), 0);
+    send(c, response_body, strlen(response_body), 0);
+    
+    if (body_data) free(body_data);
+    close(c);
+    return NULL;
 }
 
 int main(void) {
