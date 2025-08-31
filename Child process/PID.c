@@ -5,13 +5,20 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <time.h>
+#include  <ctype.h>
+
 
 #define PORT 8080
-
+ 
+void str_tolower(char *s) {
+    for (int i = 0; s[i]; i++)
+        s[i] = tolower((unsigned char)s[i]);
+}
 void handle_client(int client_fd, struct sockaddr_in client_addr) {
-
-    time_t now = time(NULL);
+    char buffer[1024];
+    time_t now;
     char time_str[64];
+    now = time(NULL);
     strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", localtime(&now));
 
     
@@ -24,12 +31,44 @@ void handle_client(int client_fd, struct sockaddr_in client_addr) {
     printf("Client IP: %s\n Port: %d\n", client_ip, client_port);
     printf("Connection start time: %s\n", time_str);
 
-    char response[] = "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
-                      "<html><body><h1>Hello from Forked Server!</h1></body></html>";
-    write(client_fd, response, strlen(response));
-    close(client_fd);
-}
+    while (1) { 
+        memset(buffer, 0, sizeof(buffer));
+        int bytes_read = read(client_fd, buffer, sizeof(buffer) - 1);
+        if (bytes_read <= 0) {
+            printf("[Child PID: %d] Client disconnected\n", getpid());
+            break;
+        }
+        char temp[2048];
+        strcpy(temp, buffer);
+        str_tolower(temp);
+        if (strstr(temp, "exit") != NULL) {
+            printf("[Child PID: %d] Exit command received, closing connection.\n", getpid());
+            break;
+        }  
+        
+        char path[64] = "/";
+        sscanf(buffer, "GET %s", path);
 
+        now = time(NULL);
+        strftime(time_str, sizeof(time_str), "%Y-%m-%d %H:%M:%S", localtime(&now));
+
+        const char *page_content;
+        if (strcmp(path, "/hello") == 0)
+            page_content = "<h1>Hello Page</h1>";
+        else if (strcmp(path, "/bye") == 0)
+            page_content = "<h1>Goodbye Page</h1>";
+        else
+            page_content = "<h1>Default Page</h1>";
+
+    char response[4096];
+     snprintf(response, sizeof(response), "HTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n"
+                      "<html><body><h1>Hello from Forked Server!</h1></body></html>",page_content, time_str, client_ip);
+
+    write(client_fd, response, strlen(response));
+    
+}
+close(client_fd);
+}
 int main() {
     int server_fd, client_fd;
     struct sockaddr_in address;
