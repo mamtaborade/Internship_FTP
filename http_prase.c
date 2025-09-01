@@ -111,6 +111,19 @@ if (host_start) {
     printf("Host = %s\n", host_value);
 }
 
+char * query = NULL ;
+char * question_mark =strchr(path,'?');
+if(question_mark !=NULL)
+{
+    *question_mark='\0'; // termonat path at '?'
+    }
+printf("path=%s\n",path);
+if(query)
+{
+    printf("Query=%s\n",query);
+}
+
+
     // -----------Handle Methods--------------
       char hdr[512];
       char body [1024];
