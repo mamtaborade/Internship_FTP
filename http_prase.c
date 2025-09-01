@@ -7,6 +7,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <errno.h>
+#include <time.h>
 
 #define PORT 8080
 
@@ -89,8 +90,11 @@ int main(void) {
         printf("Http methods = %s\n",method);  
            // task 2 only  HTTP methods printing ..
 
+        //---------------Parse Host -------------------//
+
+
         // assume `req` contains full HTTP request
-char *host_start = strstr(req, "Host: \n");  // we extracting host value from http rwa request line  thsi is logic for extracting host value .
+char *host_start = strstr(req, "Host: ");  // we extracting host value from http rwa request line  thsi is logic for extracting host value .
 if (host_start) {
     host_start += 5;  // move pointer after "Host:"
     while (*host_start == ' ') host_start++;  // skip spaces
@@ -107,23 +111,55 @@ if (host_start) {
     printf("Host = %s\n", host_value);
 }
 
-        
-
+    // -----------Handle Methods--------------
+      char hdr[512];
+      char body [1024];
+      
      
         if (strcmp(method,"GET")!=0){
-        const char *body = "405 Method not Allowed \n";    // if rahter than GET method fpund it will show error
-        char hdr[200];
+        strcpy(body,"405 Method not allowed \n");    // if rahter than GET method fpund it will show error
         snprintf(hdr, sizeof(hdr),
-                 "HTTP/1.1 200 OK\r\n"
+                 "HTTP/1.1 405 MethodNot allowed \r\n"
                  "Content-Type: text/plain\r\n"
                  "Content-Length: %zu\r\n"
                  "Connection: close\r\n\r\n",
                  strlen(body));
+        }
+        else if (strcmp(path, "/hello") == 0) {
+            strcpy(body,"<html><body><h1>Hello Page</h1></body></html>");
+            snprintf(hdr, sizeof(hdr),
+                     "HTTP/1.1 200 OK\r\n"
+                     "Content-Type: text/html\r\n\r\n"
+                       "Content-Length: %zu\r\n"
+                 "Connection: close\r\n\r\n",strlen(body));
+        }
+        else if (strcmp(path,"/time")==0)
+        {
+            time_t now = time(NULL);
+            char *tstr =ctime(&now);
+            tstr[strcspn(tstr,"\n")]='\0';  // remove this line 
 
+            snprintf(body,sizeof(body),"%s",tstr);
+            snprintf(hdr,sizeof(hdr),
+            "HTTP/1.1 200 OK\r\n"
+                 "Content-Type: text/plain\r\n"
+                 "Content-Length: %zu\r\n"
+                 "Connection: close\r\n\r\n",
+                 strlen(body));
+        }
+        else{
+            strcpy(body,"Welcome to my Server! \n");
+            snprintf(hdr,sizeof(hdr),
+              "HTTP/1.1 200 OK\r\n"
+             "Content-Type: text/plain\r\n"
+             "Content-Length: %zu\r\n"
+             "Connection: close\r\n\r\n",
+             strlen(body));
+        }
         send(c, hdr, strlen(hdr), 0);
         send(c, body, strlen(body), 0);
         close(c);
         continue ; // skip to next request 
     }
 }
-}
+
