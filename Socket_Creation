@@ -1,0 +1,25 @@
+----------------------------SOCKET CREATION STEPS----------------------------
+
+STEP 1- Socket Creation
+Use the 'socket()' system call to create a socket descriptor. This specifies the communication domain (e.g., IPv4), socket type (e.g., stream or datagram), and protocol.
+
+Example in C:
+	int sockfd = socket(AF_INET,SOCK_STREAM,0);
+	
+STEP 2- Binding (for server sockets)
+Bind the socket to a specific IP address and port number using the 'bind()' system call. This associates the socket with a local address.
+
+STEP 3- Listening (for server sockets)
+Put the socket into listening mode with 'listen()', specifying the backlog queue size for incoming connections.
+
+STEP 4- Accepting Connections (for server sockets)
+Accept incoming connection requests with 'accept()', which returns a new socket descriptor for the established connection.
+
+STEP 5- Connecting (for client sockets)
+Use 'connect()' to establish a connection to a server socket at a specified IP address and port.
+
+STEP 6- Data Transmission
+Use 'send()' and 'recv()' (or 'write()' and 'read()') to transmit and receive data over the connected socket.
+
+STEP 7- Closing the Socket
+Close the socket descriptor with 'close()' when communication is finished.
