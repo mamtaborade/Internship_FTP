@@ -45,3 +45,14 @@ Task 3 – Map URL → File - Parse the request line (GET /about.html HTTP/1.1).
 Task 4 – Support Different File Types - Based on file extension, send correct Content-Type:  .html → text/html  .txt → text/plain  .jpg → image/jpeg .png → image/png
 
 ![image alt](https://github.com/mamtaborade/Internship_FTP/blob/266eb6960ec0e9c394626389f2fd21af385459b7/OUTPUT/Day11_Task(OP).webm)
+
+# DAY12_Task(OUTPUT)
+1. Print raw headers (Task 1)
+2. Extract method/path/version (Task 2)
+3. Extract Host header (Task 3)
+4. Serve different responses (Task 4)
+5. Parse query params (Task 5)
+6. Handle POST body (Task 6)
+7. Multi-client support (Task 7, optional)
+
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/6b29333c380409b681f3ae875c26a6050faa2566/OUTPUT/Day17_Task(OP).png)
