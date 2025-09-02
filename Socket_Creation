@@ -1,4 +1,4 @@
-----------------------------SOCKET CREATION STEPS----------------------------
+-----------------------------SOCKET CREATION STEPS-----------------------------
 
 STEP 1- Socket Creation
 Use the socket() system call to create a socket descriptor. This specifies the communication domain (e.g., IPv4), socket type (e.g., stream or datagram), and protocol.
