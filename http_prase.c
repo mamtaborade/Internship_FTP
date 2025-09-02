@@ -8,9 +8,11 @@
 #include <netinet/in.h>
 #include <errno.h>
 #include <time.h>
+#include<pthread.h> 
 
 #define PORT 8080
-
+     
+ssize_t recv_all_headers(int fd, char *buf, size_t cap);
 // Read until end of HTTP headers (\r\n\r\n) or buffer full
 ssize_t recv_all_headers(int fd, char *buf, size_t cap) {
     size_t used = 0;
@@ -34,6 +36,17 @@ ssize_t recv_all_headers(int fd, char *buf, size_t cap) {
     printf("==== RAW HTTP Request Headers ===\n%s\n",buf);   // this help us to see what the browser send when we type a url 
     return (ssize_t)used;    // this return how many  bytes of headers we actually read 
 }
+   void *handle_client(void *arg) {
+    int c = *(int*)arg;
+    free(arg); // free malloc'ed socket pointer
+
+    char req[8192];
+    ssize_t n = recv_all_headers(c, req, sizeof(req));
+    if (n <= 0) {
+        close(c);
+        return NULL;
+    }
+} ;
 
 int main(void) {
     int s = socket(AF_INET, SOCK_STREAM, 0);
@@ -74,6 +87,17 @@ int main(void) {
             perror("accept");
             continue;
         }
+        int *pclient = malloc(sizeof(int));
+    *pclient = c;
+
+    pthread_t tid;
+    if (pthread_create(&tid, NULL, handle_client, pclient) != 0) {
+        perror("pthread_create");
+        close(c);
+        free(pclient);
+    } else {
+        pthread_detach(tid); // auto cleanup after thread exits
+    }
 
         char req[8192];
          // char buffer 
@@ -126,7 +150,7 @@ if(query)
 
     // -----------Handle Methods--------------
       char hdr[512];
-      char body [1024];
+      char body [4026];
       
      
         if (strcmp(method,"GET")!=0){
@@ -160,19 +184,27 @@ if(query)
                  "Connection: close\r\n\r\n",
                  strlen(body));
         }
-        else{
-            strcpy(body,"Welcome to my Server! \n");
+        
+    // ............Handle post request ..................
+
+        
+        else {
+            strcpy(body,"Welcome to my Server! \n");     
             snprintf(hdr,sizeof(hdr),
               "HTTP/1.1 200 OK\r\n"
              "Content-Type: text/plain\r\n"
              "Content-Length: %zu\r\n"
              "Connection: close\r\n\r\n",
-             strlen(body));
+             strlen(body));                          
         }
+
+     
+    
+
         send(c, hdr, strlen(hdr), 0);
         send(c, body, strlen(body), 0);
         close(c);
-        continue ; // skip to next request 
+         // skip to next request 
     }
 }
 
