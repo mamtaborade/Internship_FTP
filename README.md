@@ -56,3 +56,10 @@ Task 4 – Support Different File Types - Based on file extension, send correct 
 7. Multi-client support (Task 7, optional)
 
 ![image alt](https://github.com/mamtaborade/Internship_FTP/blob/6b29333c380409b681f3ae875c26a6050faa2566/OUTPUT/Day17_Task(OP).png)
+
+# DAY21_Task(OUTPUT)
+Task 1: Modify server to handle each client in a thread.
+Task 2: Modify server to parse Content-Length and read body correctly.
+Task 3: Save body into a file data.txt.
+
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/2eb14c2db59f9b98ceecf07e1cadddf369807261/OUTPUT/DAY21_Task(OP).png)
