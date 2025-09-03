@@ -198,7 +198,6 @@ if(query)
              strlen(body));                          
         }
 
-     
     
 
         send(c, hdr, strlen(hdr), 0);
