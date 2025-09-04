@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <errno.h>
+#include <time.h>
 
 #define PORT 8080
 
@@ -87,7 +88,43 @@ int main(void) {
         sscanf(req, "%7s %511s %15s", method, path, version);
         printf("Method=%s Path=%s Version=%s\n", method, path, version);
 
-        const char *body = "Parsed!\n";
+        if (strcmp(method, "GET") != 0)
+        return send(c, "HTTP/1.1 405 Method Not Allowed\r\n\r\n", 35, 0), close(c), 0;
+         
+
+        printf("HTTP Method: %s\n", method);
+
+        char *host_start = strstr(req, "Host:");
+        if(host_start){
+
+            host_start += 5;
+            while( *host_start == ' ')
+            host_start++;
+            char host_val[256];
+            sscanf(host_start, "%255s",host_val);
+            printf("host = %s\n", host_val);
+        }
+
+        char *query = strchr(path, '?');
+        if (query) {
+            *query = '\0';         
+            query++;              
+            printf("Query=%s\n", query);
+        }
+        char body[512];
+        if (strcmp(path, "/hello") == 0) {
+            snprintf(body, sizeof(body), "Hello Student!\n");
+        } 
+        else if (strcmp(path, "/time") == 0) {
+            time_t now = time(NULL);
+            struct tm *t = localtime(&now);
+            strftime(body, sizeof(body), "Current time: %Y-%m-%d %H:%M:%S\n", t);
+        } 
+        else {
+            snprintf(body, sizeof(body), "Unknown Path!\n");
+        }
+
+        // const char *body = "Parsed!\n";
         char hdr[200];
         snprintf(hdr, sizeof(hdr),
                  "HTTP/1.1 200 OK\r\n"
