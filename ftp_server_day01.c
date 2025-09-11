@@ -40,6 +40,7 @@ int main() {
             send(client_fd, "230 Login successful\r\n", 23, 0);
         } else if (strncmp(buffer, "QUIT", 4) == 0) {
             send(client_fd, "221 Goodbye\r\n", 13, 0);
+            printf("Client requested QUIT. Closing connection.\n");
             break;
         } else {
             send(client_fd, "502 Command not implemented\r\n", 29, 0);
