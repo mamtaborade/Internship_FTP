@@ -63,3 +63,12 @@ Task 2: Modify server to parse Content-Length and read body correctly.
 Task 3: Save body into a file data.txt.
 
 ![image alt](https://github.com/mamtaborade/Internship_FTP/blob/2eb14c2db59f9b98ceecf07e1cadddf369807261/OUTPUT/DAY21_Task(OP).png)
+
+# Day 1 – FTP Basics & Control Connection
+Tasks:
+1.Implement basic TCP server on port 2121.
+2.Send FTP greeting: "220 FTP Server Ready\r\n".
+3.Accept USER and PASS commands → reply with "230 Login successful\r\n".
+4.Handle QUIT command.
+
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/1a00095ba05be2adde02cef7919206733247b12d/OUTPUT/Day%201%20%E2%80%93%20FTP%20Control%20Connection.png)
