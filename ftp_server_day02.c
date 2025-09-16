@@ -17,10 +17,15 @@ int main() {
     printf("IP   = %s\n", ip);
     printf("Port = %d\n", port);
 
+
+    //  send control reply 
+
+    printf("200 PORT command sucessful\r\n");
+
     
 
 
-    printf("Client requested PORT IP=%s, port=%d\n", ip, port);
+    // printf("Client requested PORT IP=%s, port=%d\n", ip, port);
 
     // Example: connect to that IP/port
     int sock = socket(AF_INET, SOCK_STREAM, 0); 
