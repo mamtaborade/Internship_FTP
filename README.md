@@ -72,3 +72,12 @@ Tasks:
 4.Handle QUIT command.
 
 ![image alt](https://github.com/mamtaborade/Internship_FTP/blob/1a00095ba05be2adde02cef7919206733247b12d/OUTPUT/Day%201%20%E2%80%93%20FTP%20Control%20Connection.png)
+
+# Day 2 – PORT Command & Data Connection Setup
+Tasks:
+1.Implement parsing of PORT command.
+2.Extract client IP & port, establish data socket.
+3.Reply "200 PORT command successful\r\n".
+4.Test with Wireshark to observe PORT command flow.
+
+![image alt](https://github.com/mamtaborade/Internship_FTP/blob/9a17843f9cd1191c0e97e3e573527fb161678e00/OUTPUT/Day%202%20-%20PORT%20Command%20%26%20Data%20Connection%20Setup.png)
